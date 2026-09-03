@@ -1,0 +1,44 @@
+#!/bin/sh
+
+maxres=720
+audio_only=0
+
+while getopts "f:m" opt; do
+    case "$opt" in
+        f)
+            maxres="$OPTARG"
+            ;;
+        m)
+            audio_only=1
+            ;;
+        *)
+            echo "Usage: ytbrowse [-f resolution] [-m]"
+            exit 1
+            ;;
+    esac
+done
+
+printf "Search YouTube: "
+read -r query
+
+[ -z "$query" ] && exit
+
+video=$(yt-dlp "ytsearch20:$query" \
+    --flat-playlist \
+    --print "%(id)s %(title)s" |
+    fzf --prompt="Select video: ")
+
+[ -z "$video" ] && exit
+
+id=$(printf "%s" "$video" | awk '{print $1}')
+
+url="https://www.youtube.com/watch?v=$id"
+
+if [ "$audio_only" -eq 1 ]; then
+    mpv "$url" \
+        --no-video \
+        --ytdl-format="bestaudio/best"
+else
+    mpv "$url" \
+        --ytdl-format="bestvideo[vcodec^=avc1][height<=${maxres}][fps<=30]+bestaudio/best"
+fi
