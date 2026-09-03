@@ -95,6 +95,9 @@ framedrop=vo
 cache=yes
 cache-secs=10
 volume-max=200(for good measure)
+
+demuxer-max-bytes=50MiB
+demuxer-max-back-bytes=20MiB(to prevent RAM leakage)
 -----------------------------------------------------------------------------------
 *Note: vo=xv means that the CPU decodes just the file and sends the raw data to the
 GPU for RGB decoding, helping free up CPU cycles alot. That's apparently the
