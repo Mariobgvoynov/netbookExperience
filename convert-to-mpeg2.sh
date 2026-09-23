@@ -1,4 +1,3 @@
-```bash
 #!/usr/bin/env bash
 
 set -u
@@ -132,4 +131,3 @@ echo " Conversion complete."
 echo " Output directory:"
 echo "   $OUTDIR"
 echo "=========================================="
-```
